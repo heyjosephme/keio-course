@@ -16,9 +16,14 @@ import {
   subMonths,
   isToday,
 } from "date-fns";
-import { CourseSession } from "@/lib/types/calendar";
 import { Course } from "@/lib/data/courseLoader";
+import { CourseSession } from "@/lib/types/calendar";
 import { Button } from "@/components/ui/button";
+import {
+  generateEveningCourseSessions,
+  generateWeekendCourseSessions,
+  getFacultyColor
+} from "@/lib/utils/courseScheduling";
 
 export default function CalendarView() {
   const [viewType, setViewType] = useState<'week' | 'month'>('week');
@@ -62,64 +67,45 @@ export default function CalendarView() {
     isToday: isSameDay(addDays(weekStart, i), new Date()),
   }));
 
-  // Convert Course to CourseSession format
+  // Convert Course to CourseSession format with proper scheduling
   const convertToCourseSessions = (courses: Course[]): CourseSession[] => {
-    return courses.map(course => {
-      // Handle both evening courses (day_of_week) and weekend courses (schedule)
-      let dayOfWeek: number;
-      let startTime: string;
-      let endTime: string;
+    const allSessions: CourseSession[] = [];
+
+    courses.forEach(course => {
+      const color = getFacultyColor(course.faculty);
 
       if (course.schedule === "土日") {
-        // Weekend courses - show on Saturday for simplicity
-        dayOfWeek = 6; // Saturday
-        startTime = "13:30";
-        endTime = "17:15";
-      } else {
-        // Evening courses
-        dayOfWeek = getDayNumber(course.day_of_week || "monday");
-        startTime = "18:20";
-        endTime = "20:05";
+        // Weekend courses: Generate both Saturday and Sunday sessions for 3 weekends
+        const weekendSessions = generateWeekendCourseSessions(
+          course.code,
+          course.name,
+          course.instructor,
+          color
+        );
+        allSessions.push(...weekendSessions);
+      } else if (course.day_of_week) {
+        // Evening courses: Generate 12 weekly sessions with proper exclusions
+        const eveningSessions = generateEveningCourseSessions(
+          course.code,
+          course.name,
+          course.instructor,
+          course.day_of_week,
+          color
+        );
+        allSessions.push(...eveningSessions);
       }
-
-      return {
-        id: course.code,
-        courseCode: course.code,
-        courseName: course.name,
-        professor: course.instructor,
-        location: "三田キャンパス", // Default location from YAML
-        startTime,
-        endTime,
-        dayOfWeek,
-        color: getFacultyColor(course.faculty),
-        type: 'lecture' as const,
-      };
     });
+
+    return allSessions;
   };
 
-  const getDayNumber = (dayName: string): number => {
-    const dayMap: { [key: string]: number } = {
-      'sunday': 0, 'monday': 1, 'tuesday': 2, 'wednesday': 3,
-      'thursday': 4, 'friday': 5, 'saturday': 6
-    };
-    return dayMap[dayName.toLowerCase()] || 1;
-  };
-
-  const getFacultyColor = (faculty: string): string => {
-    const colorMap: { [key: string]: string } = {
-      '総合': '#3B82F6',     // Blue
-      '文学部': '#10B981',   // Green
-      '経済学部': '#8B5CF6', // Purple
-      '法学部': '#F59E0B',   // Amber
-      '教職': '#EF4444',     // Red
-    };
-    return colorMap[faculty] || '#6B7280'; // Default gray
-  };
 
   const courseSessions = convertToCourseSessions(selectedCourses);
 
-  const getCoursesForDay = (dayOfWeek: number) => {
-    return courseSessions.filter((course) => course.dayOfWeek === dayOfWeek);
+  const getCoursesForDay = (date: Date) => {
+    return courseSessions.filter((session) =>
+      isSameDay(session.date, date)
+    );
   };
 
   const navigatePrevious = () => {
@@ -250,8 +236,7 @@ export default function CalendarView() {
 
               {/* Course Events */}
               {weekDays.map((day, dayIdx) => {
-                const dayOfWeek = day.date.getDay();
-                const courses = getCoursesForDay(dayOfWeek);
+                const courses = getCoursesForDay(day.date);
 
                 return courses.map((course) => {
                   const { top, height } = getCoursePosition(course);
@@ -303,8 +288,7 @@ export default function CalendarView() {
 
               {/* Month days */}
               {monthDays.map((day) => {
-                const dayOfWeek = day.getDay();
-                const courses = getCoursesForDay(dayOfWeek);
+                const courses = getCoursesForDay(day);
                 const dayIsToday = isToday(day);
 
                 return (
