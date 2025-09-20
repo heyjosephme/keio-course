@@ -99,41 +99,117 @@ summer_session_1: # 夏期スクーリング Ⅰ期 (8/4～8/9)
     course_type: "experiment"
     is_capacity_limited: true
 
-evening_courses: # 夜間スクーリング (10月1日～2026年1月12日, 18:20～20:05)
-  - code: "52545"
-    name: "国文学古典研究"
-    credits: 2
-    instructor: "合山　林太郎"
-    day_of_week: "木"
-    start_time: "18:20"
-    end_time: "20:05"
-    faculty: "文学部"
-    delivery_method: "schooling"
-    period: "10月1日（水）～2026年1月12日（月）"
+evening_courses: # 夜間スクーリング - 12週間 (105分×12回)
+  schedule_info:
+    duration: "12週間"
+    period: "10月1日（水）～1月12日（月）"
+    session_length: "105分"
+    total_sessions: 12
+    time: "18:20-20:05"
+    location: "三田キャンパス"
+    excluded_days:
+      - "土曜日・日曜日"
+      - "一部の祝日"
+      - "三田祭期間"
+    special_holiday_classes:
+      - "2024-10-13" # 月・祝
+      - "2024-11-03" # 月・祝
+      - "2025-01-12" # 月・祝 (最終日)
+    mitasai_period: # 三田祭期間は休講
+      start: "2024-11-19" # 水
+      end: "2024-11-24"   # 月
+    makeup_day_rule: "翌週の同じ曜日" # e.g. 1月19日
+    notes: "11月25日（火）の片付け日は開講"
 
-  - code: "72540"
-    name: "日本政治論"
-    credits: 2
-    instructor: "松浦　淳介/姜　兌ゆん"
-    day_of_week: "水"
-    start_time: "18:20"
-    end_time: "20:05"
-    faculty: "法学部"
-    delivery_method: "schooling"
-    period: "10月1日（水）～2026年1月12日（月）"
+  courses:
+    # Monday courses
+    - code: "22517"
+      name: "国文学古典研究"
+      credits: 2
+      instructor: "合山　林太郎"
+      faculty: "文学部"
+      day_of_week: "monday"
 
-  - code: "62502"
-    name: "経済原論（マクロ経済学）"
-    credits: 2
-    instructor: "穂刈　享"
-    day_of_week: "金"
-    start_time: "18:20"
-    end_time: "20:05"
-    faculty: "経済学部"
-    delivery_method: "schooling"
-    period: "10月1日（水）～2026年1月12日（月）"
+    # Tuesday courses
+    - code: "12504"
+      name: "論理学"
+      credits: 2
+      instructor: "杉本　雄太郎"
+      faculty: "総合"
+      day_of_week: "tuesday"
 
-weekend_courses: # 秋期週末スクーリング (10月11日～10月26日, 土13:30～17:15, 日9:00～12:45)
+    - code: "62533"
+      name: "経済地理"
+      credits: 2
+      instructor: "花島　誠人"
+      faculty: "経済学部"
+      day_of_week: "tuesday"
+
+    # Wednesday courses
+    - code: "72540"
+      name: "日本政治論"
+      credits: 2
+      instructor: "松浦　淳介/姜　兌ゆん"
+      faculty: "法学部"
+      day_of_week: "wednesday"
+
+    - code: "62520"
+      name: "世界経済論"
+      credits: 2
+      instructor: "宮﨑　礼二"
+      faculty: "経済学部"
+      day_of_week: "wednesday"
+
+    # Thursday courses
+    - code: "52545"
+      name: "国文学古典研究"
+      credits: 2
+      instructor: "合山　林太郎"
+      faculty: "文学部"
+      day_of_week: "thursday"
+
+    - code: "62525"
+      name: "専門外国書講読（英書）"
+      credits: 2
+      instructor: "篠原　洋治"
+      faculty: "経済学部"
+      day_of_week: "thursday"
+
+    # Friday courses
+    - code: "62502"
+      name: "経済原論（マクロ経済学）"
+      credits: 2
+      instructor: "穂刈　享"
+      faculty: "経済学部"
+      day_of_week: "friday"
+
+    - code: "72538"
+      name: "日本政治史"
+      credits: 2
+      instructor: "玉木　寛輝"
+      faculty: "法学部"
+      day_of_week: "friday"
+
+weekend_courses: # 秋期週末スクーリング - 3週にわたり土日集中型 (105分×12回)
+  schedule_info:
+    duration: "3週間"
+    format: "土日集中型"
+    session_length: "105分"
+    total_sessions: 12
+    location: "三田キャンパス"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    dates:
+      - weekend: 1
+        dates: ["2024-10-11", "2024-10-12"] # 土日
+      - weekend: 2
+        dates: ["2024-10-18", "2024-10-19"] # 土日
+      - weekend: 3
+        dates: ["2024-10-25", "2024-10-26"] # 土日
+    makeup_day: "2024-11-01" # 補講日
+    max_credits: "1科目2単位"
+
+  courses:
   - code: "12502"
     name: "哲学"
     credits: 2

@@ -13,16 +13,16 @@ export default function Home() {
           </p>
           <div className="flex gap-4 justify-center">
             <Link
-              href="/calendar"
+              href="/courses"
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              View Calendar
+              Select Courses
             </Link>
             <Link
-              href="/planner"
+              href="/calendar"
               className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Course Planner
+              View Calendar
             </Link>
           </div>
         </div>
