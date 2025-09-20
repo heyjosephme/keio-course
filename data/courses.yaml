@@ -1,0 +1,350 @@
+# Keio University Course Timetable 2025
+# Extracted from: data/pdfs/keio_timetable_2025.pdf
+
+summer_session_1: # 夏期スクーリング Ⅰ期 (8/4～8/9)
+  - code: "12512"
+    name: "歴史（西洋史）"
+    credits: 2
+    instructor: "舟橋　倫子"
+    time_slot: 1
+    start_time: "09:00"
+    end_time: "10:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+
+  - code: "12517"
+    name: "文学A"
+    credits: 2
+    instructor: "植松　公彦"
+    time_slot: 1
+    start_time: "09:00"
+    end_time: "10:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+
+  - code: "12503"
+    name: "論理学"
+    credits: 2
+    instructor: "佐々木　昭則/天本　貴之"
+    time_slot: 3
+    start_time: "13:45"
+    end_time: "15:30"
+    faculty: "総合"
+    delivery_method: "schooling"
+
+  - code: "12554"
+    name: "数学（線形数学）"
+    credits: 2
+    instructor: "宮崎　直哉/白旗　優"
+    time_slot: 3
+    start_time: "13:45"
+    end_time: "15:30"
+    faculty: "総合"
+    delivery_method: "schooling"
+
+  # English courses
+  - code: "22501"
+    name: "英語（リーディング）A"
+    credits: 1
+    instructor: "髙橋　宣也"
+    time_slot: 1
+    start_time: "09:00"
+    end_time: "10:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+
+  - code: "22503"
+    name: "英語（リーディング）D"
+    credits: 1
+    instructor: "横山　千晶"
+    time_slot: 3
+    start_time: "13:45"
+    end_time: "15:30"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+
+  # Economics Department courses
+  - code: "62510"
+    name: "専門外国書講読（英書）"
+    credits: 2
+    instructor: "穂刈　享"
+    time_slot: 1
+    start_time: "09:00"
+    end_time: "10:45"
+    faculty: "経済学部"
+    delivery_method: "schooling"
+
+  - code: "62503"
+    name: "経済原論（ミクロ経済学）"
+    credits: 2
+    instructor: "田端　辰哉"
+    time_slot: 3
+    start_time: "13:45"
+    end_time: "15:30"
+    faculty: "経済学部"
+    delivery_method: "schooling"
+
+  # Lab courses
+  - code: "32501"
+    name: "物理学実験B"
+    credits: 1
+    instructor: "1クラス"
+    time_slot: "morning"
+    start_time: "09:00"
+    end_time: "12:00"
+    faculty: "総合"
+    delivery_method: "schooling"
+    course_type: "experiment"
+    is_capacity_limited: true
+
+evening_courses: # 夜間スクーリング (10月1日～2026年1月12日, 18:20～20:05)
+  - code: "52545"
+    name: "国文学古典研究"
+    credits: 2
+    instructor: "合山　林太郎"
+    day_of_week: "木"
+    start_time: "18:20"
+    end_time: "20:05"
+    faculty: "文学部"
+    delivery_method: "schooling"
+    period: "10月1日（水）～2026年1月12日（月）"
+
+  - code: "72540"
+    name: "日本政治論"
+    credits: 2
+    instructor: "松浦　淳介/姜　兌ゆん"
+    day_of_week: "水"
+    start_time: "18:20"
+    end_time: "20:05"
+    faculty: "法学部"
+    delivery_method: "schooling"
+    period: "10月1日（水）～2026年1月12日（月）"
+
+  - code: "62502"
+    name: "経済原論（マクロ経済学）"
+    credits: 2
+    instructor: "穂刈　享"
+    day_of_week: "金"
+    start_time: "18:20"
+    end_time: "20:05"
+    faculty: "経済学部"
+    delivery_method: "schooling"
+    period: "10月1日（水）～2026年1月12日（月）"
+
+weekend_courses: # 秋期週末スクーリング (10月11日～10月26日, 土13:30～17:15, 日9:00～12:45)
+  - code: "12502"
+    name: "哲学"
+    credits: 2
+    instructor: "鴻　浩介 他"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "人文科学分野"
+
+  - code: "12550"
+    name: "自然科学特論"
+    credits: 2
+    instructor: "上村　佳孝"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "自然科学分野"
+
+  - code: "22525"
+    name: "英語（リーディング）A"
+    credits: 1
+    instructor: "吉原　学"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "外国語科目"
+
+  - code: "22526"
+    name: "英語（ライティング）2"
+    credits: 1
+    instructor: "藤田　眞理子"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "外国語科目"
+
+  - code: "22533"
+    name: "ドイツ語（初級前期）I-A"
+    credits: 1
+    instructor: "岩崎　佑太"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "外国語科目"
+
+  - code: "22561"
+    name: "フランス語（初級前期）I-A"
+    credits: 1
+    instructor: "大出　敦"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "総合"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "外国語科目"
+
+  - code: "52507"
+    name: "論理学（専門）"
+    credits: 2
+    instructor: "天本　貴之/田中　大海"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "文学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "第1類"
+
+  - code: "52527"
+    name: "図書館・情報学"
+    credits: 2
+    instructor: "中島　玲子"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "文学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "第1類"
+    is_shared_course: true
+
+  - code: "52561"
+    name: "哲学（専門）"
+    credits: 2
+    instructor: "森　正樹/鈴木　優花"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "文学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "第1類"
+    is_shared_course: true
+
+  - code: "72528"
+    name: "東洋史特殊"
+    credits: 2
+    instructor: "高橋　伸夫"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "文学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    category: "第2類"
+    is_shared_course: true
+
+  - code: "62515"
+    name: "経済学史"
+    credits: 2
+    instructor: "穂刈　享"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "経済学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    is_shared_course: true
+
+  - code: "62520"
+    name: "経済政策"
+    credits: 2
+    instructor: "金子　光"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "経済学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    is_shared_course: true
+
+  - code: "72507"
+    name: "刑法"
+    credits: 2
+    instructor: "山内　竜太"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "法学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+    is_shared_course: true
+
+  - code: "72508"
+    name: "海洋法"
+    credits: 2
+    instructor: "武井　良修"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "法学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+
+  - code: "72528"
+    name: "地域研究（現代中国論）"
+    credits: 2
+    instructor: "高橋　伸夫"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "法学部"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+
+  - code: "82506"
+    name: "英語科教育法"
+    credits: 3
+    instructor: "川瀬　絢子"
+    schedule: "土日"
+    saturday_time: "13:30-17:15"
+    sunday_time: "09:00-12:45"
+    faculty: "教職"
+    delivery_method: "schooling"
+    is_capacity_limited: true
+
+# Course metadata
+faculties:
+  - "総合" # General Education
+  - "文学部" # Literature
+  - "経済学部" # Economics
+  - "法学部" # Law
+  - "教職" # Teacher Training
+
+time_slots:
+  1: "09:00-10:45"
+  2: "11:00-12:45"
+  3: "13:45-15:30"
+  4: "15:45-17:30"
+
+delivery_methods:
+  - "schooling" # スクーリング (on-campus)
+  - "text" # テキスト (correspondence)
+  - "media" # メディア (online)
+
+special_markers:
+  "★": "capacity_limited" # 定員設定科目
+  "◇": "shared_course" # 共通開講科目
