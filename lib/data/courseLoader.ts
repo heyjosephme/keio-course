@@ -52,9 +52,11 @@ export function loadCourseData(): CourseData {
 export function getAllCourses(): Course[] {
   const data = loadCourseData();
 
-  // All courses are in evening_courses.courses
-  // Some have day_of_week (evening), some have schedule (weekend)
-  return data.evening_courses.courses;
+  // Combine evening and weekend courses
+  const eveningCourses = data.evening_courses.courses || [];
+  const weekendCourses = data.weekend_courses.courses || [];
+
+  return [...eveningCourses, ...weekendCourses];
 }
 
 export function getCoursesByFaculty(faculty: string): Course[] {

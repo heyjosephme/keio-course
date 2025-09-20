@@ -12,7 +12,7 @@ export default async function CoursesPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">コース選択</h1>
           <p className="mt-2 text-gray-600">
-カレンダーに追加するコースを選択してください
+            カレンダーに追加するコースを選択してください
           </p>
         </div>
         <CourseSelectionClient courses={courses} />

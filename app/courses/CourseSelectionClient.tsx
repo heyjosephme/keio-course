@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import CourseSelector from "@/components/courses/CourseSelector";
+import SessionBasedSelector from "@/components/courses/SessionBasedSelector";
 import { Button } from "@/components/ui/button";
 import { Course } from "@/lib/data/courseLoader";
 
@@ -18,14 +18,14 @@ export default function CourseSelectionClient({
 
   const translateDay = (day: string): string => {
     const dayMap: { [key: string]: string } = {
-      'monday': '月',
-      'tuesday': '火',
-      'wednesday': '水',
-      'thursday': '木',
-      'friday': '金',
-      'saturday': '土',
-      'sunday': '日',
-      '土日': '土日'
+      monday: "月",
+      tuesday: "火",
+      wednesday: "水",
+      thursday: "木",
+      friday: "金",
+      saturday: "土",
+      sunday: "日",
+      土日: "土日",
     };
     return dayMap[day.toLowerCase()] || day;
   };
@@ -51,8 +51,8 @@ export default function CourseSelectionClient({
       {/* Course Selector */}
       <div className="lg:col-span-2">
         <div className="bg-white rounded-lg shadow p-6">
-          <CourseSelector
-            courses={courses}
+          <SessionBasedSelector
+            allCourses={courses}
             onCourseSelect={handleCourseSelect}
             onCourseDeselect={handleCourseDeselect}
             selectedCourses={selectedCourses}
@@ -67,7 +67,7 @@ export default function CourseSelectionClient({
 
           {selectedCourses.length === 0 ? (
             <p className="text-gray-500 text-center py-8">
-まだコースが選択されていません
+              まだコースが選択されていません
             </p>
           ) : (
             <div className="space-y-4">
@@ -87,7 +87,10 @@ export default function CourseSelectionClient({
                   <div key={course.code} className="text-sm">
                     <div className="font-medium">{course.name}</div>
                     <div className="text-gray-500">
-                      {translateDay(course.day_of_week || course.schedule || "")} - {course.credits}単位
+                      {translateDay(
+                        course.day_of_week || course.schedule || ""
+                      )}{" "}
+                      - {course.credits}単位
                     </div>
                   </div>
                 ))}
@@ -98,7 +101,7 @@ export default function CourseSelectionClient({
                 className="w-full"
                 disabled={selectedCourses.length === 0}
               >
-カレンダーを表示
+                カレンダーを表示
               </Button>
             </div>
           )}

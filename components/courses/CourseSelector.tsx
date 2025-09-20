@@ -16,6 +16,7 @@ interface CourseSelectorProps {
   onCourseSelect: (course: Course) => void;
   onCourseDeselect: (course: Course) => void;
   selectedCourses: Course[];
+  showDayFilter?: boolean; // Optional: hide day filter for weekend courses
 }
 
 export default function CourseSelector({
@@ -23,6 +24,7 @@ export default function CourseSelector({
   onCourseSelect,
   onCourseDeselect,
   selectedCourses,
+  showDayFilter = true,
 }: CourseSelectorProps) {
   const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses);
   const [selectedFaculty, setSelectedFaculty] = useState<string>("all");
@@ -38,9 +40,10 @@ export default function CourseSelector({
       );
     }
 
-    if (selectedDay !== "all") {
+    if (selectedDay !== "all" && showDayFilter) {
       filtered = filtered.filter(
-        (course) => course.day_of_week === selectedDay || course.schedule === selectedDay
+        (course) =>
+          course.day_of_week === selectedDay || course.schedule === selectedDay
       );
     }
 
@@ -52,21 +55,25 @@ export default function CourseSelector({
   );
   const translateDay = (day: string): string => {
     const dayMap: { [key: string]: string } = {
-      'monday': '月',
-      'tuesday': '火',
-      'wednesday': '水',
-      'thursday': '木',
-      'friday': '金',
-      'saturday': '土',
-      'sunday': '日',
-      '土日': '土日'
+      monday: "月",
+      tuesday: "火",
+      wednesday: "水",
+      thursday: "木",
+      friday: "金",
+      saturday: "土",
+      sunday: "日",
+      土日: "土日",
     };
     return dayMap[day.toLowerCase()] || day;
   };
 
-  const days = Array.from(new Set(
-    courses.map((course) => course.day_of_week || course.schedule).filter(Boolean)
-  )) as string[];
+  const days = Array.from(
+    new Set(
+      courses
+        .map((course) => course.day_of_week || course.schedule)
+        .filter(Boolean)
+    )
+  ) as string[];
 
   const isSelected = (course: Course) => {
     return selectedCourses.some((selected) => selected.code === course.code);
@@ -91,7 +98,9 @@ export default function CourseSelector({
       );
 
       if (conflictingCourse) {
-        alert(`同じ曜日に既に「${conflictingCourse.name}」が選択されています。先にそのコースを削除してください。`);
+        alert(
+          `同じ曜日に既に「${conflictingCourse.name}」が選択されています。先にそのコースを削除してください。`
+        );
         return;
       }
 
@@ -128,29 +137,31 @@ export default function CourseSelector({
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">曜日</label>
-          <Select value={selectedDay} onValueChange={setSelectedDay}>
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="曜日を選択" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">全曜日</SelectItem>
-              {days.map((day) => (
-                <SelectItem key={day} value={day}>
-                  {translateDay(day)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {showDayFilter && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">曜日</label>
+            <Select value={selectedDay} onValueChange={setSelectedDay}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="曜日を選択" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">全曜日</SelectItem>
+                {days.map((day) => (
+                  <SelectItem key={day} value={day}>
+                    {translateDay(day)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
 
       {/* Selected Courses Summary */}
       {selectedCourses.length > 0 && (
         <div className="bg-blue-50 rounded-lg p-4">
           <h3 className="font-semibold text-blue-900 mb-2">
-選択中のコース ({selectedCourses.length})
+            選択中のコース ({selectedCourses.length})
           </h3>
           <div className="flex flex-wrap gap-2">
             {selectedCourses.map((course) => (
@@ -168,12 +179,12 @@ export default function CourseSelector({
       {/* Course List */}
       <div className="space-y-3">
         <h3 className="font-semibold">
-利用可能なコース ({filteredCourses.length})
+          利用可能なコース ({filteredCourses.length})
         </h3>
 
         {filteredCourses.length === 0 ? (
           <div className="text-gray-500 text-center py-8">
-フィルター条件に一致するコースが見つかりません
+            フィルター条件に一致するコースが見つかりません
           </div>
         ) : (
           <div className="grid gap-3">
@@ -204,7 +215,12 @@ export default function CourseSelector({
                     </h4>
                     <div className="text-sm text-gray-600 space-y-1">
                       <div>講師: {course.instructor}</div>
-                      <div>曜日: {translateDay(course.day_of_week || course.schedule || "")}</div>
+                      <div>
+                        曜日:{" "}
+                        {translateDay(
+                          course.day_of_week || course.schedule || ""
+                        )}
+                      </div>
                     </div>
                   </div>
                   <Button
@@ -216,8 +232,8 @@ export default function CourseSelector({
                     {isSelected(course)
                       ? "選択済み"
                       : hasConflict(course)
-                        ? "時間重複"
-                        : "選択"}
+                      ? "時間重複"
+                      : "選択"}
                   </Button>
                 </div>
               </div>
