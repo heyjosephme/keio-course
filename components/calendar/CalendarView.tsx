@@ -20,22 +20,45 @@ import { Course } from "@/lib/data/courseLoader";
 import { CourseSession } from "@/lib/types/calendar";
 import { Button } from "@/components/ui/button";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   generateEveningCourseSessions,
   generateWeekendCourseSessions,
   getFacultyColor
 } from "@/lib/utils/courseScheduling";
+import { getTestSelectedCourses } from "@/lib/utils/testData";
+import { downloadICalFile, getExportSummary } from "@/lib/utils/icalExport";
 
 export default function CalendarView() {
-  const [viewType, setViewType] = useState<'week' | 'month'>('week');
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [viewType, setViewType] = useState<'week' | 'month'>('month'); // Default to month view
+
+  // Set default to October 2025 (course start month) or current month if in session
+  const getDefaultDate = () => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    // If we're in the academic session period (Oct 2025 - Jan 2026), show current month
+    if ((currentYear === 2025 && currentMonth >= 9) ||
+        (currentYear === 2026 && currentMonth <= 0)) {
+      return now;
+    }
+
+    // Otherwise, default to October 2025 (course start)
+    return new Date(2025, 9, 1); // October 2025
+  };
+
+  const [currentDate, setCurrentDate] = useState(getDefaultDate());
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
 
-  // Load selected courses from localStorage
+  // Load selected courses from localStorage (with test data fallback)
   useEffect(() => {
-    const stored = localStorage.getItem('selectedCourses');
-    if (stored) {
-      setSelectedCourses(JSON.parse(stored));
-    }
+    const courses = getTestSelectedCourses();
+    setSelectedCourses(courses);
   }, []);
 
   // Week view logic
@@ -108,6 +131,13 @@ export default function CalendarView() {
     );
   };
 
+  // Check if date is during 三田祭 period
+  const isMitasaiPeriod = (date: Date) => {
+    const mitasaiStart = new Date(2025, 10, 19); // Nov 19, 2025
+    const mitasaiEnd = new Date(2025, 10, 24);   // Nov 24, 2025
+    return date >= mitasaiStart && date <= mitasaiEnd;
+  };
+
   const navigatePrevious = () => {
     if (viewType === 'week') {
       setCurrentDate(subWeeks(currentDate, 1));
@@ -128,6 +158,26 @@ export default function CalendarView() {
     setCurrentDate(new Date());
   };
 
+  const handleExportCalendar = () => {
+    if (selectedCourses.length === 0) return;
+
+    const sessions = convertToCourseSessions(selectedCourses);
+    const summary = getExportSummary(sessions);
+
+    // Show summary and download
+    const confirmMessage = `カレンダーを出力します：\n\n` +
+      `• コース数: ${summary.uniqueCourses}\n` +
+      `• 総授業回数: ${summary.totalSessions}\n` +
+      `• 期間: ${summary.dateRange ?
+        `${format(summary.dateRange.start, 'yyyy/MM/dd')} ～ ${format(summary.dateRange.end, 'yyyy/MM/dd')}`
+        : 'なし'}\n\n` +
+      `iCalファイルをダウンロードしますか？`;
+
+    if (confirm(confirmMessage)) {
+      downloadICalFile(sessions);
+    }
+  };
+
   const getCoursePosition = (course: CourseSession) => {
     const [startHour, startMin] = course.startTime.split(":").map(Number);
     const [endHour, endMin] = course.endTime.split(":").map(Number);
@@ -140,7 +190,8 @@ export default function CalendarView() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white rounded-lg shadow">
+    <TooltipProvider>
+      <div className="h-full flex flex-col bg-white rounded-lg shadow">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b">
         <div className="flex items-center gap-4">
@@ -175,6 +226,14 @@ export default function CalendarView() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportCalendar}
+            disabled={selectedCourses.length === 0}
+          >
+            📥 カレンダー出力
+          </Button>
           <Button
             variant={viewType === 'week' ? 'default' : 'outline'}
             size="sm"
@@ -252,15 +311,27 @@ export default function CalendarView() {
                         padding: "0 4px",
                       }}
                     >
-                      <div
-                        className="h-full rounded-lg p-2 text-white text-xs shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-                        style={{ backgroundColor: course.color }}
-                      >
-                        <div className="font-semibold">{course.courseCode}</div>
-                        <div className="opacity-90">{course.courseName}</div>
-                        <div className="opacity-90">{course.location}</div>
-                        <div className="opacity-90">{course.professor}</div>
-                      </div>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div
+                            className="h-full rounded-lg p-2 text-white text-xs shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                            style={{ backgroundColor: course.color }}
+                          >
+                            <div className="font-semibold">{course.courseName}</div>
+                            <div className="opacity-90 text-[10px]">{course.courseCode}</div>
+                            <div className="opacity-90">{course.professor}</div>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-gray-900 text-white border border-gray-700">
+                          <div className="text-sm">
+                            <div className="font-semibold text-white">{course.courseName}</div>
+                            <div className="text-gray-300">コード: {course.courseCode}</div>
+                            <div className="text-gray-300">講師: {course.professor}</div>
+                            <div className="text-gray-300">場所: {course.location}</div>
+                            <div className="text-gray-300">時間: {course.startTime}-{course.endTime}</div>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
                   );
                 });
@@ -290,12 +361,14 @@ export default function CalendarView() {
               {monthDays.map((day) => {
                 const courses = getCoursesForDay(day);
                 const dayIsToday = isToday(day);
+                const isMitasai = isMitasaiPeriod(day);
 
                 return (
                   <div
                     key={day.toISOString()}
-                    className={`bg-white h-32 p-2 overflow-hidden ${
-                      dayIsToday ? 'ring-2 ring-blue-500' : ''
+                    className={`h-32 p-2 overflow-hidden ${
+                      dayIsToday ? 'ring-2 ring-blue-500 bg-white' :
+                      isMitasai ? 'bg-orange-50 border border-orange-200' : 'bg-white'
                     }`}
                   >
                     <div
@@ -309,18 +382,33 @@ export default function CalendarView() {
                     </div>
                     <div className="space-y-1">
                       {courses.slice(0, 3).map((course) => (
-                        <div
-                          key={course.id}
-                          className="text-xs p-1 rounded text-white truncate"
-                          style={{ backgroundColor: course.color }}
-                          title={`${course.courseCode} - ${course.courseName}`}
-                        >
-                          {course.courseCode}
-                        </div>
+                        <Tooltip key={course.id}>
+                          <TooltipTrigger asChild>
+                            <div
+                              className="text-xs p-1 rounded text-white truncate cursor-pointer hover:opacity-80 transition-opacity"
+                              style={{ backgroundColor: course.color }}
+                            >
+                              {course.courseName}
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-gray-900 text-white border border-gray-700">
+                            <div className="text-sm">
+                              <div className="font-semibold text-white">{course.courseName}</div>
+                              <div className="text-gray-300">コード: {course.courseCode}</div>
+                              <div className="text-gray-300">講師: {course.professor}</div>
+                              <div className="text-gray-300">時間: {course.startTime}-{course.endTime}</div>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
                       ))}
                       {courses.length > 3 && (
                         <div className="text-xs text-gray-500">
                           +他{courses.length - 3}件
+                        </div>
+                      )}
+                      {isMitasai && courses.length === 0 && (
+                        <div className="text-xs text-orange-600 font-medium">
+                          三田祭期間
                         </div>
                       )}
                     </div>
@@ -331,6 +419,7 @@ export default function CalendarView() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </TooltipProvider>
   );
 }
